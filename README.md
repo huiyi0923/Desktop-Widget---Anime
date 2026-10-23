@@ -1,7 +1,7 @@
 # 大肥鱼 · PySide6 桌面猫娘宠物（透明宠物挂件 / Desktop Pet）
 
 > 一只住在你桌面角落、会自己碎碎念、能被你拖动、会跳舞睡觉的二次元猫娘桌面宠物。
-基于 **Python + PySide6** 开发，窗口完全透明、隐藏系统标题栏，播放 **AI 生成的透明 GIF 动画**。
+> 基于 **Python + PySide6** 开发，窗口完全透明、隐藏系统标题栏，播放 **AI 生成的透明 GIF 动画**。
 
 <div align="center">
 
@@ -33,7 +33,7 @@
 
 ## 项目简介
 
-**大肥鱼**（英文名 **Big Fat Fish / Dafeiyu**）是一款运行在 **Windows**桌面上的\*\*透明桌面宠物（Desktop Pet / Desktop Widget / Desktop Mascot）\*\*程序。
+**大肥鱼**（英文名 **Big Fat Fish / Dafeiyu**）是一款运行在 **Windows** 桌面上的 **透明桌面宠物（Desktop Pet / Desktop Widget / Desktop Mascot）** 程序。
 
 它以 **DeepSeek 风格的猫娘（catgirl / kemonomimi）二次元形象**为基础，形象与全部动作动画均由 **AI 辅助生成**。程序使用 **Python / PySide6（Qt for Python）** 实现：
 
@@ -49,7 +49,7 @@
 ## 核心特性
 
 - 🪟 **透明无边框窗口**：`FramelessWindowHint + WA_TranslucentBackground`，整个窗口任意形状，只显示猫娘本身。
-- 🎞️ 6 **种 GIF 动作动画**：待机（idle）、点击回应（click）、拖拽（drag）、碎碎念（talk）、跳舞（dance）、睡觉（sleep）、开心蹦跳（happy）。
+- 🎞️ **6 种 GIF 动作动画**：待机（idle）、点击回应（click）、拖拽（drag）、碎碎念（talk）、跳舞（dance）、睡觉（sleep）、开心蹦跳（happy）。
 - 🖱️ **丰富的鼠标交互**：左键单击回应、按住拖动、右键弹出美化菜单、双击退出。
 - 💬 **自动碎碎念气泡**：待机每隔 20 秒随机显示一句话，文字出现在宠物左上角。
 - 📋 **美化右键菜单**：圆角样式、灰色分隔线（左右留白）、悬停变灰、字体紧凑小巧。
@@ -67,13 +67,13 @@
 
 | 动作 | 触发方式 | 预览文件 |
 | --- | --- | --- |
-| 待机 | 鼠标不动 | `idle.gif` |
-| 点击回应 | 左键单击 | `click.gif` |
-| 拖拽动画 | 按住左键拖动 | `drag.gif` |
-| 碎碎念说话 | 待机自动 / 菜单 | `talk.gif` |
-| 跳舞 | 右键菜单 | `dance.gif` |
-| 睡觉 | 右键菜单 | `sleep.gif` |
-| 开心蹦跳 | 右键菜单 | `happy.gif` |
+| 待机 | 鼠标不动 | `gif/idle.gif` |
+| 点击回应 | 左键单击 | `gif/click.gif` |
+| 拖拽动画 | 按住左键拖动 | `gif/drag.gif` |
+| 碎碎念说话 | 待机自动 / 菜单 | `gif/talk.gif` |
+| 跳舞 | 右键菜单 | `gif/dance.gif` |
+| 睡觉 | 右键菜单 | `gif/sleep.gif` |
+| 开心蹦跳 | 右键菜单 | `gif/happy.gif` |
 
 ***
 
@@ -93,8 +93,10 @@
 
 ```bash
 git clone https://github.com/huiyi0923/Desktop-Widget---Anime.git
-cd Desktop-Widget---Anime/pyside6
+cd Desktop-Widget---Anime
 ```
+
+> 代码就在仓库根目录，不需要进入子文件夹，`大肥鱼.py`、`ui/`、`gif/`、`images/` 都在根下。
 
 ### 2. 安装依赖
 
@@ -117,7 +119,7 @@ python 大肥鱼.py
 ## 目录结构
 
 ```
-pyside6/
+Desktop-Widget---Anime/
 ├── 大肥鱼.py              # 主程序：桌面宠物（窗口 + GIF + 交互 + 右键菜单）
 ├── ui/
 │   ├── main.py            # 设置窗口 + 关于窗口（QWebEngineView + QWebChannel）
@@ -133,6 +135,7 @@ pyside6/
 │   ├── sleep.gif              # 睡觉
 │   ├── happy.gif              # 开心蹦跳
 │   └── angry.gif              # 生气（等待后续添加）
+└── README.md              # 项目说明文档
 ```
 
 ***
@@ -158,13 +161,13 @@ pyside6/
 
 ```python
 GIF_FILES = {
-    "idle": "idle.gif",   # 待机
-    "click": "click.gif", # 点击回应
-    "drag": "drag.gif",   # 拖拽
-    "talk": "talk.gif",   # 碎碎念
-    "dance": "dance.gif", # 跳舞
-    "sleep": "sleep.gif", # 睡觉
-    "happy": "happy.gif", # 开心
+    "idle": "gif/idle.gif",   # 待机
+    "click": "gif/click.gif", # 点击回应
+    "drag": "gif/drag.gif",   # 拖拽
+    "talk": "gif/talk.gif",   # 碎碎念
+    "dance": "gif/dance.gif", # 跳舞
+    "sleep": "gif/sleep.gif", # 睡觉
+    "happy": "gif/happy.gif", # 开心
 }
 ```
 
@@ -197,7 +200,7 @@ GIF_FILES = {
 
 ### 更换猫娘形象 / GIF
 
-把新的透明 GIF 放到 `pyside6/` 目录并替换对应文件名即可，例如替换 `idle.gif` 即为新的待机动画。
+把新的透明 GIF 放到 `gif/` 目录并替换对应文件名即可，例如替换 `gif/idle.gif` 即为新的待机动画。
 
 ### 修改碎碎念台词
 
@@ -214,7 +217,7 @@ TALK_TEXTS = [
 
 ### 修改默认设置
 
-编辑 `main.py` 中的 `DEFAULT_SETTINGS` 字典，可调整默认大小、碎碎念间隔、默认网站列表等。
+编辑 `ui/main.py` 中的 `DEFAULT_SETTINGS` 字典，可调整默认大小、碎碎念间隔、默认网站列表等。
 
 ### 更换应用图标
 
@@ -222,7 +225,7 @@ TALK_TEXTS = [
 
 ### 增加新动作
 
-1. 把 GIF 放到目录下；
+1. 把 GIF 放到 `gif/` 目录下；
 2. 在 `GIF_FILES` 和 `ACTION_LABELS` 中登记动作；
 3. 可选：在 `ACTION_MS` 设置该动作的播放时长。
 
@@ -237,7 +240,7 @@ A：这是高分屏缩放导致的。本程序已内置平滑缩放 + DPR 适配
 A：旧版本存在此问题，已通过「看门狗 + 状态机」修复。请更新到 v1.0 的 `大肥鱼.py`。
 
 **Q3：GIF 没有加载出来？**
-A：确认 GIF 与 `大肥鱼.py` 在同一目录，且文件名与 `GIF_FILES` 映射一致。
+A：确认 GIF 在 `gif/` 文件夹下，且文件名与 `GIF_FILES` 映射一致（如 `gif/idle.gif`）。
 
 **Q4：`from ui.main import ...` 报错？**
 A：确保 `大肥鱼.py` 与 `ui/` 文件夹在同一级目录，且目录名是 `ui`（不要用 `html`，会与 Python 标准库重名）。
