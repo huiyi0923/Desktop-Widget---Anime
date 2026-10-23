@@ -121,18 +121,18 @@ pyside6/
 ├── 大肥鱼.py              # 主程序：桌面宠物（窗口 + GIF + 交互 + 右键菜单）
 ├── ui/
 │   ├── main.py            # 设置窗口 + 关于窗口（QWebEngineView + QWebChannel）
-│   ├── settings.html      # 设置页面（浅色系双栏 UI）
-│   └── index.html         # 页面示例 / 调试页
+│   └── settings.html      # 设置页面（浅色系双栏 UI）
 ├── images/
-│   └── tb.webp            # 应用图标（DeepSeek 风格猫娘，AI 生成）
-├── idle.gif               # 待机 / 小动作
-├── click.gif              # 点击回应
-├── drag.gif               # 拖拽动画
-├── talk.gif               # 碎碎念说话
-├── dance.gif              # 跳舞
-├── sleep.gif              # 睡觉
-├── happy.gif              # 开心蹦跳
-└── angry.gif              # 生气（等待后续添加）
+│   └── tb.webp            # 应用图标（DeepSeek 风格猫娘）
+├── gif/
+│   ├── idle.gif               # 待机 / 小动作
+│   ├── click.gif              # 点击回应
+│   ├── drag.gif               # 拖拽动画
+│   ├── talk.gif               # 碎碎念说话
+│   ├── dance.gif              # 跳舞
+│   ├── sleep.gif              # 睡觉
+│   ├── happy.gif              # 开心蹦跳
+│   └── angry.gif              # 生气（等待后续添加）
 ```
 
 ***
