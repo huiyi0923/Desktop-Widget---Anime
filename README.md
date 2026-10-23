@@ -7,7 +7,7 @@
 
 ![大肥鱼](./images/tb.webp)
 
-**版本 v1.0** ｜ **作者：Yanxi** ｜ **个人网站：[https://suyanxi.top](https://suyanxi.top)**
+**版本 v1.1.2** ｜ **作者：Yanxi** ｜ **个人网站：[https://suyanxi.top](https://suyanxi.top)**
 
 </div><br>
 
@@ -17,7 +17,7 @@
 <img width="960" height="540" alt="example3" src="https://github.com/user-attachments/assets/2dec2b34-fda4-4a34-9899-869e1c2d35be" />
 <img width="960" height="540" alt="example4" src="https://github.com/user-attachments/assets/d84c684b-194d-4435-a3df-40fa439bc559" />
 
-**ZIP（内含EXE，可直接运行无需PYTHON）下载地址：**
+**ZIP（内含EXE，可直接运行无需PYTHON）下载地址：https://pan.baidu.com/s/1Vrfl-fbpkxcortc2xZ_ZhA?pwd=db84 提取码: db84**
 
 ***
 
