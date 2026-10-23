@@ -11,6 +11,14 @@
 
 </div>
 
+**图片示例** 
+<img width="960" height="540" alt="example" src="https://github.com/user-attachments/assets/c387b4af-3717-4697-ae47-7a341b7684ba" />
+<img width="960" height="540" alt="example2" src="https://github.com/user-attachments/assets/f420fd4e-772e-4c85-a655-bf7c9224c668" />
+<img width="960" height="540" alt="example3" src="https://github.com/user-attachments/assets/2dec2b34-fda4-4a34-9899-869e1c2d35be" />
+<img width="960" height="540" alt="example4" src="https://github.com/user-attachments/assets/d84c684b-194d-4435-a3df-40fa439bc559" />
+
+ZIP（内涵EXE，可直接运行无需PYTHON）下载地址：
+
 ***
 
 ## 目录
