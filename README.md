@@ -269,7 +269,7 @@ A：本项目已把菜单样式缩小（圆角 9px、紧凑内边距、12px 字�
 
 - ✅ 允许：个人学习、研究、收藏、非商业二次开发、非商业分享。
 - ❌ 禁止：任何形式的**商用**、转售、收取会员费 / 授权费、企业项目内置使用、广告牟利。
-- 📌 保留版权声明：`© 2026 大肥鱼 · Copyright © 2026 Weiqing Network All Rights Reserved`
+- 📌 保留版权声明：`© 2026 大肥鱼 · Copyright © 2026 MicroCent Network All Rights Reserved`
 
 商用授权与合作请联系「微清技术支持部」（见关于窗口）。
 
