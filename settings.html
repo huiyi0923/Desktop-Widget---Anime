@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>设置 · 大肥鱼</title>
+<link rel="icon" href="./images/tb.webp">
+<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<style>
+  :root{
+    --bg:#f5f6fa;
+    --surface:#ffffff;
+    --surface-2:#eef0f5;
+    --hairline:rgba(15,23,42,.10);
+    --hairline-soft:rgba(15,23,42,.06);
+    --text:#1f2937;
+    --muted:#5b6574;
+    --faint:#9aa4b0;
+    --accent:#7c6cf0;
+    --accent-2:#a78bfa;
+    --ok:#16a34a;
+    --danger:#dc2626;
+    --radius:10px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:radial-gradient(1200px 800px at 85% -10%,rgba(124,108,240,.10),transparent 60%),
+               radial-gradient(900px 700px at -10% 110%,rgba(167,139,250,.07),transparent 55%),
+               var(--bg);
+    color:var(--text);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    font-size:14px;
+    line-height:1.6;
+  }
+  #app{display:flex;height:100vh;overflow:hidden}
+
+  /* ===== 左侧导航 ===== */
+  #sidebar{
+    width:236px;flex:0 0 236px;
+    border-right:1px solid var(--hairline);
+    background:rgba(255,255,255,.55);
+    display:flex;flex-direction:column;
+    padding:20px 14px 14px;
+  }
+  .brand{display:flex;align-items:center;gap:11px;padding:2px 8px 18px}
+  .brand-icon{
+    width:38px;height:38px;border-radius:11px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 16px rgba(124,108,240,.28);
+  }
+  .brand-icon svg{width:22px;height:22px;fill:#fff}
+  .brand-name{font-size:15px;font-weight:650;letter-spacing:.2px}
+  .brand-sub{font-size:11px;color:var(--faint);margin-top:-2px}
+  nav{display:flex;flex-direction:column;gap:4px;flex:1}
+  .nav-item{
+    display:flex;align-items:center;gap:11px;
+    padding:10px 12px;border-radius:9px;
+    color:var(--muted);cursor:pointer;user-select:none;
+    border:1px solid transparent;font-size:13.5px;
+  }
+  .nav-item svg{width:18px;height:18px;fill:currentColor;opacity:.85}
+  .nav-item:hover{color:var(--text);background:var(--surface)}
+  .nav-item.active{
+    color:var(--text);background:var(--surface);
+    border-color:var(--hairline-soft);
+    font-weight:600;
+    box-shadow:inset 3px 0 0 var(--accent);
+  }
+  .sidebar-foot{font-size:11px;color:var(--faint);padding:12px 8px 0;border-top:1px solid var(--hairline-soft)}
+
+  /* ===== 右侧内容 ===== */
+  #main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+  #topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 30px 14px;border-bottom:1px solid var(--hairline-soft);
+  }
+  #topbar h1{font-size:19px;font-weight:700;margin:0;letter-spacing:.3px}
+  #topbar p{margin:2px 0 0;font-size:12.5px;color:var(--faint)}
+  .primary-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#fff;border:none;border-radius:9px;
+    padding:9px 18px;font-size:13.5px;font-weight:600;cursor:pointer;
+    box-shadow:0 6px 14px rgba(124,108,240,.26);
+  }
+  .primary-btn:hover{filter:brightness(1.05)}
+  .primary-btn:active{transform:translateY(1px)}
+  #content{flex:1;overflow:auto;padding:26px 30px 30px}
+
+  .section{display:none;animation:fade .22s ease}
+  .section.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  .group{margin-bottom:26px}
+  .group-title{
+    font-size:12px;font-weight:650;color:var(--faint);
+    letter-spacing:.5px;margin:0 0 4px;text-transform:uppercase;
+  }
+  .row{
+    display:flex;align-items:center;justify-content:space-between;gap:18px;
+    padding:15px 2px;border-bottom:1px solid var(--hairline-soft);
+  }
+  .row:last-child{border-bottom:none}
+  .row-label{font-size:14px}
+  .row-desc{font-size:12px;color:var(--muted);margin-top:1px}
+
+  /* 滑块 */
+  .slider-wrap{display:flex;align-items:center;gap:14px;min-width:0;flex:1;max-width:340px}
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:2px;
+    background:var(--surface-2);outline:none;cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+    background:#fff;border:3px solid var(--accent);box-shadow:0 2px 6px rgba(15,23,42,.2);
+  }
+  .val{
+    min-width:52px;text-align:right;font-variant-numeric:tabular-nums;
+    font-weight:700;color:var(--text);background:var(--surface-2);
+    padding:5px 9px;border-radius:7px;font-size:13px;white-space:nowrap;
+  }
+
+  /* 开关 */
+  .switch{position:relative;width:46px;height:26px;flex:0 0 auto;cursor:pointer}
+  .switch input{position:absolute;opacity:0;width:0;height:0}
+  .track{
+    position:absolute;inset:0;border-radius:13px;background:var(--surface-2);
+    border:1px solid var(--hairline);transition:background .18s;
+  }
+  .track::after{
+    content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;
+    background:#fff;transition:transform .18s;box-shadow:0 2px 5px rgba(15,23,42,.22);
+  }
+  .switch input:checked + .track{background:var(--accent);border-color:var(--accent)}
+  .switch input:checked + .track::after{transform:translateX(20px)}
+
+  /* 网站列表 */
+  .add-bar{display:flex;gap:8px;margin:14px 0 16px}
+  .text-input{
+    flex:1;min-width:0;background:var(--surface);color:var(--text);
+    border:1px solid var(--hairline);border-radius:8px;padding:9px 12px;font-size:16px;
+  }
+  .text-input::placeholder{color:var(--faint)}
+  .text-input:focus{outline:none;border-color:var(--accent)}
+  .small-btn{
+    background:var(--surface-2);color:var(--text);border:1px solid var(--hairline);
+    border-radius:8px;padding:9px 16px;font-size:13.5px;cursor:pointer;white-space:nowrap;
+  }
+  .small-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .site-list{list-style:none;margin:0;padding:0}
+  .site-item{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 14px;border-radius:9px;background:var(--surface);
+    border:1px solid var(--hairline-soft);margin-bottom:8px;
+  }
+  .site-name{font-weight:650;min-width:96px;color:var(--text)}
+  .site-url{color:var(--muted);font-size:13px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .site-action{display:flex;gap:4px}
+  .icon-btn{
+    background:none;border:none;cursor:pointer;width:30px;height:30px;border-radius:7px;
+    display:flex;align-items:center;justify-content:center;color:var(--muted);
+  }
+  .icon-btn svg{width:16px;height:16px;fill:currentColor}
+  .icon-btn:hover{color:var(--text);background:var(--surface-2)}
+  .icon-btn.del:hover{color:var(--danger);background:rgba(220,38,38,.08)}
+  .empty{color:var(--faint);font-size:13px;padding:14px 0;text-align:center}
+  .hint{font-size:12px;color:var(--faint)}
+
+  /* 关于 */
+  .about-card{
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    padding:44px 24px 20px;
+  }
+  .about-icon{
+    width:72px;height:72px;border-radius:20px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 26px rgba(124,108,240,.28);margin-bottom:18px;
+  }
+  .about-icon svg{width:38px;height:38px;fill:#fff}
+  .about-name{font-size:20px;font-weight:700}
+  .about-ver{font-size:12.5px;color:var(--accent);margin:4px 0 14px}
+  .about-desc{max-width:440px;color:var(--muted);font-size:13.5px;margin:0 0 22px}
+  .about-foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--hairline-soft);
+    font-size:11.5px;color:var(--faint)}
+
+  /* 状态提示 */
+  #toast{
+    position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);
+    background:var(--surface);border:1px solid var(--hairline);color:var(--text);
+    padding:10px 18px;border-radius:9px;font-size:13.5px;opacity:0;pointer-events:none;
+    box-shadow:0 8px 24px rgba(15,23,42,.12);
+    transition:opacity .2s,transform .2s;z-index:50;
+  }
+  #toast.show{opacity:1;transform:translate(-50%,0)}
+  #toast.ok{border-color:var(--ok);color:var(--ok)}
+
+  /* 无后端提示 */
+  #no-backend{
+    display:none;margin-bottom:18px;padding:11px 14px;border-radius:9px;
+    background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.28);
+    color:var(--danger);font-size:12.5px;
+  }
+
+  /* 响应式 */
+  @media (max-width:640px){
+    #app{flex-direction:column}
+    #sidebar{width:100%;flex:none;flex-direction:row;align-items:center;padding:12px 12px 8px;border-right:none;border-bottom:1px solid var(--hairline)}
+    .brand{padding:0 6px}
+    nav{flex-direction:row;overflow-x:auto;gap:2px}
+    .nav-item{white-space:nowrap}
+    .nav-item.active{box-shadow:none}
+    .sidebar-foot{display:none}
+    #topbar{padding:16px 18px 12px}
+    #content{padding:18px}
+    .row{flex-direction:column;align-items:stretch;gap:10px}
+    .slider-wrap{max-width:none}
+    .add-bar{flex-wrap:wrap}
+    .site-item{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== 视图：左侧导航 ===== -->
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="brand-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v.6A6 6 0 0 1 18 12a6 6 0 0 1-2 5.4V18a2 2 0 0 1-2 2h-2v2a2 2 0 0 1-4 0v-2a2 2 0 0 1-2-2v-.6A6 6 0 0 1 6 12a6 6 0 0 1 2-5.4V6a4 4 0 0 1 4-4z"/></svg>
+      </div>
+      <div>
+        <div class="brand-name" id="appName">大肥鱼</div>
+        <div class="brand-sub">设置面板</div>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-item active" data-section="basic" onclick="switchSection('basic')">
+        <svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm8.9 5a8 8 0 0 0 0-2l2-1.5-2-3.5-2.3.9a8 8 0 0 0-1.7-1L16.5 3h-4l-.4 2.4a8 8 0 0 0-1.7 1L8.1 5.5l-2 3.5L8.1 10.5a8 8 0 0 0 0 2l-2 1.5 2 3.5 2.3-.9a8 8 0 0 0 1.7 1l.4 2.4h4l.4-2.4a8 8 0 0 0 1.7-1l2.3.9 2-3.5-2-1.5z"/></svg>
+        基础设置
+      </div>
+      <div class="nav-item" data-section="sites" onclick="switchSection('sites')">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm7.9 9h-3a15 15 0 0 0-2.4-6.5A8 8 0 0 1 19.9 11zM12 4c.8 1.6 1.6 3.3 1.9 5h-3.8C10.4 7.3 11.2 5.6 12 4zM4 12a8 8 0 0 1 .6-3h3.5c-.1 1-.1 2 0 3H4zm5 0c-.1-1-.1-2 0-3h6c.1 1 .1 2 0 3H9zm-1 2H5.2a8 8 0 0 1-.2 1 8 8 0 0 1-1.4-1H8zm2 0h4a8 8 0 0 1-2 2 8 8 0 0 1-2-2zm6-2c.1-1 .1-2 0-3h3.4A8 8 0 0 1 21 12h-4zm-3.1 4h3.7A8 8 0 0 1 12 20c.8-1.6 1.6-3.3 1.9-4zM8.6 16c.9.9 2.4 1.9 3.4 2-1-1.1-1.8-2-2.6-2H8.6zm6.8 0h1.2c.8 1 1.6 2 2 3a8 8 0 0 1-4 1c1-1.1 1.3-2 1-2.5l.8-.5z"/></svg>
+        网站列表
+      </div>
+      <div class="nav-item" data-section="about" onclick="switchSection('about')">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        关于
+      </div>
+    </nav>
+    <div class="sidebar-foot">基于 PySide6 · QWebChannel</div>
+  </aside>
+
+  <!-- ===== 视图：右侧内容 ===== -->
+  <main id="main">
+    <div id="topbar">
+      <div>
+        <h1 id="sectionTitle">基础设置</h1>
+        <p id="sectionDesc">调整宠物的行为与外观</p>
+      </div>
+      <button class="primary-btn" onclick="saveAll()">保存更改</button>
+    </div>
+
+    <div id="content">
+      <div id="no-backend"></div>
+
+      <!-- 基础设置 -->
+      <section id="basic" class="section active">
+        <div class="group">
+          <p class="group-title">行为</p>
+          <div class="row">
+            <div>
+              <div class="row-label">碎碎念间隔</div>
+              <div class="row-desc">待机时每隔多久自动说一句话</div>
+            </div>
+            <div class="slider-wrap">
+              <input type="range" id="talkInterval" min="10" max="120" step="5" value="20" oninput="val('talkInterval','sec')">
+              <div class="val"><span id="talkIntervalV">20</span>&nbsp;秒</div>
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <div class="row-label">宠物大小</div>
+              <div class="row-desc">桌面上显示的角色尺寸</div>
+            </div>
+            <div class="slider-wrap">
+              <input type="range" id="petSize" min="160" max="420" step="10" value="200" oninput="val('petSize','px')">
+              <div class="val"><span id="petSizeV">200</span>&nbsp;px</div>
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <div class="row-label">碎碎念文字</div>
+              <div class="row-desc">说话时在宠物左上角显示文字气泡</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="showTalk" checked><span class="track"></span></label>
+          </div>
+          <div class="row">
+            <div>
+              <div class="row-label">窗口置顶</div>
+              <div class="row-desc">让宠物始终显示在其他窗口之上</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="alwaysTop" checked><span class="track"></span></label>
+          </div>
+        </div>
+      </section>
+
+      <!-- 网站列表 -->
+      <section id="sites" class="section">
+        <div class="group">
+          <p class="group-title">常用网站</p>
+          <p class="hint">这些站点会出现在宠物右键菜单的「打开网站」里，点击即可用浏览器访问。</p>
+          <div class="add-bar">
+            <input class="text-input" id="siteName" placeholder="站点名称，如：哔哩哔哩">
+            <input class="text-input" id="siteUrl" placeholder="地址，如：https://bilibili.com">
+            <button class="small-btn" onclick="addSite()">添加</button>
+          </div>
+          <ul class="site-list" id="siteList"></ul>
+        </div>
+      </section>
+
+      <!-- 关于 -->
+      <section id="about" class="section">
+        <div class="about-card">
+          <div class="about-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v.6A6 6 0 0 1 18 12a6 6 0 0 1-2 5.4V18a2 2 0 0 1-2 2h-2v2a2 2 0 0 1-4 0v-2a2 2 0 0 1-2-2v-.6A6 6 0 0 1 6 12a6 6 0 0 1 2-5.4V6a4 4 0 0 1 4-4z"/></svg>
+          </div>
+          <div class="about-name" id="aboutName">大肥鱼</div>
+          <div class="about-ver" id="aboutVer">v1.0</div>
+          <p class="about-desc" id="aboutDesc">一条住在你桌面上的小鱼，会碎碎念、会撒娇，还能帮你收藏常用网站。</p>
+          <button class="primary-btn" onclick="openAbout()">打开关于窗口</button>
+          <div class="about-foot" id="aboutFoot">© 2026 大肥鱼 · PySide6 + WebChannel</div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  const DEFAULT_WEBSITES = [
+    {name:"哔哩哔哩", url:"https://www.bilibili.com"},
+    {name:"百度", url:"https://www.baidu.com"},
+  ];
+
+  let backend = null;
+  let state = { talkInterval:20, petSize:200, showTalk:true, alwaysTop:true, websites:[],
+                appName:"大肥鱼", appVersion:"1.0" };
+
+  // ===== 视图切换 =====
+  const TITLES = { basic:["基础设置","调整宠物的行为与外观"], sites:["网站列表","收藏常用网站，随时访问"], about:["关于","版本与版权信息"] };
+  function switchSection(name){
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.section===name));
+    document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active', s.id===name));
+    const t=TITLES[name];
+    document.getElementById('sectionTitle').textContent=t[0];
+    document.getElementById('sectionDesc').textContent=t[1];
+  }
+
+  // ===== 滑块联动 =====
+  function val(id, unit){
+    const v=document.getElementById(id).value;
+    document.getElementById(id+'V').textContent=v;
+    const key = id==='talkInterval'?'talkInterval':'petSize';
+    state[key]=parseInt(v,10);
+  }
+  function bindSwitch(id, key){
+    document.getElementById(id).addEventListener('change', e=>state[key]=e.target.checked);
+  }
+
+  // ===== 状态提示 =====
+  let toastTimer=null;
+  function toast(msg, ok=false){
+    const el=document.getElementById('toast');
+    el.textContent=msg; el.classList.toggle('ok', ok); el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>el.classList.remove('show'), 1600);
+  }
+
+  // ===== 网站列表渲染 =====
+  function renderSites(){
+    const list=document.getElementById('siteList');
+    list.innerHTML='';
+    if(!state.websites.length){ list.innerHTML='<li class="empty">还没有收藏的网站，先用上面的输入框添加一个吧。</li>'; return; }
+    state.websites.forEach((s,i)=>{
+      const li=document.createElement('li');
+      li.className='site-item';
+      li.innerHTML = '<span class="site-name"></span>'+
+        '<span class="site-url"></span>'+
+        '<span class="site-action">'+
+          '<button class="icon-btn" title="打开"><svg viewBox="0 0 24 24"><path d="M14 3h7v7h-2V6.4l-8.3 8.3-1.4-1.4L17.6 5H14V3zm-8 1a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-7h-2v7a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h7V4H6z"/></svg></button>'+
+          '<button class="icon-btn del" title="删除"><svg viewBox="0 0 24 24"><path d="M9 3h6l1 2h4v2H4V5h4l1-2zm-3 6h12l-1 12H7L6 9zm4 2v7h2v-7h-2zm4 0v7h2v-7h-2z"/></svg></button>'+
+        '</span>';
+      li.querySelector('.site-name').textContent=s.name;
+      li.querySelector('.site-url').textContent=s.url;
+      const openBtn=li.querySelector('.icon-btn:first-child');
+      const delBtn=li.querySelector('.icon-btn.del');
+      openBtn.onclick=()=>{ if(backend) backend.open_website(s.url); else toast('桌面程序外无法打开'); };
+      delBtn.onclick=()=>removeSite(i);
+      list.appendChild(li);
+    });
+  }
+
+  function addSite(){
+    const n=document.getElementById('siteName').value.trim();
+    let u=document.getElementById('siteUrl').value.trim();
+    if(!n||!u){ toast('请填写名称和地址'); return; }
+    if(!/^https?:\/\//i.test(u)) u='https://'+u;
+    state.websites.push({name:n,url:u});
+    document.getElementById('siteName').value='';
+    document.getElementById('siteUrl').value='';
+    renderSites();
+    if(backend) backend.save_settings(JSON.stringify(state));
+    toast('已添加', true);
+  }
+  function removeSite(i){
+    state.websites.splice(i,1);
+    renderSites();
+    if(backend) backend.save_settings(JSON.stringify(state));
+    toast('已删除', true);
+  }
+
+  // ===== 保存 / 关于 =====
+  function saveAll(){
+    collect();
+    if(backend){
+      backend.save_settings(JSON.stringify(state));
+      toast('设置已保存', true);
+    } else {
+      toast('请通过桌面宠物程序打开设置');
+    }
+  }
+  function collect(){
+    state.talkInterval=parseInt(document.getElementById('talkInterval').value,10);
+    state.petSize=parseInt(document.getElementById('petSize').value,10);
+    state.showTalk=document.getElementById('showTalk').checked;
+    state.alwaysTop=document.getElementById('alwaysTop').checked;
+  }
+  function openAbout(){
+    if(backend) backend.open_about();
+    else toast('关于窗口由桌面程序打开');
+  }
+
+  // ===== 初始化 =====
+  function applyState(s){
+    if(s.appName) document.getElementById('appName').textContent=s.appName;
+    if(s.appVersion) document.getElementById('aboutVer').textContent='v'+s.appVersion;
+    if(s.appName) document.getElementById('aboutName').textContent=s.appName;
+    if(s.talkInterval!=null) document.getElementById('talkInterval').value=s.talkInterval;
+    if(s.petSize!=null) document.getElementById('petSize').value=s.petSize;
+    if(s.showTalk!=null) document.getElementById('showTalk').checked=s.showTalk;
+    if(s.alwaysTop!=null) document.getElementById('alwaysTop').checked=s.alwaysTop;
+    document.getElementById('talkIntervalV').textContent=s.talkInterval||20;
+    document.getElementById('petSizeV').textContent=s.petSize||200;
+    state.websites = s.websites && s.websites.length ? s.websites : DEFAULT_WEBSITES;
+    renderSites();
+  }
+
+  function connect(){
+    if(typeof QWebChannel!=='undefined' && typeof qt!=='undefined' && qt.webChannelTransport){
+      new QWebChannel(qt.webChannelTransport, function(channel){
+        backend=channel.objects.backend;
+        backend.get_settings(function(json){
+          try{ applyState(JSON.parse(json)); }catch(e){ applyState({}); }
+        });
+      });
+    } else {
+      const nb=document.getElementById('no-backend');
+      nb.style.display='block';
+      nb.textContent='当前未连接桌面宠物程序，显示的是默认设置（仅供预览）。';
+      applyState({websites:[]});
+    }
+  }
+
+  bindSwitch('showTalk','showTalk');
+  bindSwitch('alwaysTop','alwaysTop');
+  document.addEventListener('DOMContentLoaded', connect);
+</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
